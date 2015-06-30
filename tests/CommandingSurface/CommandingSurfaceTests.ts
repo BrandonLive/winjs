@@ -1776,7 +1776,8 @@ module CorsicaTests {
 
             commandingSurface.open();
 
-            LiveUnit.LoggingCore.logComment("Verify that first and last tabStop have tabIndex === 0");
+            LiveUnit.LoggingCore.logComment("Verify that first and last tabStop have tabIndex === 0, " +
+            "when the control is opened");
             var firstTabStopIndex = 0
             var finalTabStopIndex = 0;
 
