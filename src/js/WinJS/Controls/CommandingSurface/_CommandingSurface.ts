@@ -680,18 +680,10 @@ export class _CommandingSurface {
     }
     _updateTabIndicesImpl(): void {
         // If the CommandingSurface is open, tabbing should carousel within the control.
-
-        var firstTabStopIndex = -1;
-        var finalTabStopIndex = -1;
-
-        if (this._isOpenedMode) {
-            var tabIndices = _ElementUtilities._getHighAndLowTabIndices(this._dom.content);
-            firstTabStopIndex = tabIndices.lowest;
-            finalTabStopIndex = tabIndices.highest;
-        } 
-
-        this._dom.firstTabStop.tabIndex = firstTabStopIndex;
-        this._dom.finalTabStop.tabIndex = finalTabStopIndex;
+        // Make sure our first and last tab stop have focusable tab indices.
+        var nextTabIndex = this._isOpenedMode ? 0 : -1;
+        this._dom.firstTabStop.tabIndex = nextTabIndex;
+        this._dom.finalTabStop.tabIndex = nextTabIndex;
     }
 
     private _keyDownHandler(ev: any) {
