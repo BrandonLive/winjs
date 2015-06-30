@@ -542,11 +542,16 @@ export class _CommandingSurface {
 
         var firstTabStop = _Global.document.createElement("div");
         _ElementUtilities.addClass(firstTabStop, _Constants.ClassNames.tabStopClass);
+        _ElementUtilities._ensureId(firstTabStop);
         root.insertBefore(firstTabStop, root.children[0]);
 
         var finalTabStop = _Global.document.createElement("div");
         _ElementUtilities.addClass(finalTabStop, _Constants.ClassNames.tabStopClass);
+        _ElementUtilities._ensureId(finalTabStop);
         root.appendChild(finalTabStop);
+
+        firstTabStop.setAttribute("x-ms-aria-flowfrom", finalTabStop.id);
+        finalTabStop.setAttribute("aria-flowto", firstTabStop.id);
 
         this._dom = {
             root: root,

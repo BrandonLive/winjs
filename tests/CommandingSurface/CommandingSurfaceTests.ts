@@ -1778,7 +1778,7 @@ module CorsicaTests {
 
             LiveUnit.LoggingCore.logComment("Verify that first and last tabStop have tabIndex === 0, " +
             "when the control is opened");
-            var firstTabStopIndex = 0
+            var firstTabStopIndex = 0;
             var finalTabStopIndex = 0;
 
             // Tab key will cause the commandingSurface to update its tab indices
