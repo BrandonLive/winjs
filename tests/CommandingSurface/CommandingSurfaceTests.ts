@@ -57,11 +57,11 @@ module CorsicaTests {
 
     function verifyTabIndices(commandingSurface: WinJS.UI.PrivateCommandingSurface, firstTabStopIndex: number, finalTabStopIndex: number) {
         // first tab stop
-        LiveUnit.Assert.areEqual(firstTabStopIndex, +commandingSurface._dom.firstTabStop.tabIndex,
+        LiveUnit.Assert.areEqual(firstTabStopIndex, commandingSurface._dom.firstTabStop.tabIndex,
             "firstTabStop doesn't match expected tab index");
 
         // last tab stop
-        LiveUnit.Assert.areEqual(finalTabStopIndex, +commandingSurface._dom.finalTabStop.tabIndex,
+        LiveUnit.Assert.areEqual(finalTabStopIndex, commandingSurface._dom.finalTabStop.tabIndex,
             "finalTabStop doesn't match expected tab index");
     }
 
