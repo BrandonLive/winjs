@@ -843,8 +843,8 @@ export class _CommandingSurface {
                     // Focus should not carousel between first and last tab stops while closed.
                     dom.firstTabStop.tabIndex = -1;
                     dom.finalTabStop.tabIndex = -1;
-                    dom.firstTabStop.setAttribute("x-ms-aria-flowfrom", "");
-                    dom.finalTabStop.setAttribute("aria-flowto", "");
+                    dom.firstTabStop.removeAttribute("x-ms-aria-flowfrom");
+                    dom.finalTabStop.removeAttribute("aria-flowto");
                 }
                 rendered.isOpenedMode = this._isOpenedMode;
             }

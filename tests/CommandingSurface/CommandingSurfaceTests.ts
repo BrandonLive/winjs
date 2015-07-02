@@ -1780,14 +1780,14 @@ module CorsicaTests {
             verifyTabIndices(commandingSurface, firstTabStopIndex, finalTabStopIndex);
         }
 
-        testTabAriaFlow() {
+        testAriaFlowAttributes() {
             var commandingSurface = new _CommandingSurface(this._element, { opened: false });
             Helper._CommandingSurface.useSynchronousAnimations(commandingSurface);
 
-            LiveUnit.Assert.isFalse(!!commandingSurface._dom.firstTabStop.getAttribute("x-ms-aria-flowfrom"),
-                "aria-flowfrom should be falsey, while closed");
-            LiveUnit.Assert.isFalse(!!commandingSurface._dom.finalTabStop.getAttribute("aria-flowto"),
-                "aria-flowto should be falsey, while closed");
+            LiveUnit.Assert.isFalse(commandingSurface._dom.firstTabStop.hasAttribute("x-ms-aria-flowfrom"),
+                "aria-flowfrom should not be set, while closed");
+            LiveUnit.Assert.isFalse(commandingSurface._dom.finalTabStop.hasAttribute("aria-flowto"),
+                "aria-flowto should not be set, while closed");
 
             commandingSurface.opened = true;
 
