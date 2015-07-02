@@ -127,7 +127,6 @@ export class _CommandingSurface {
     private _winKeyboard: _KeyboardBehavior._WinKeyboard;
     private _refreshBound: () => void;
     private _resizeHandlerBound: (ev: any) => any;
-    private _updateTabIndicesThrottled: Function;
     private _dataChangedEvents = ["itemchanged", "iteminserted", "itemmoved", "itemremoved", "reload"];
     private _machine: _OpenCloseMachine.OpenCloseMachine;
     private _data: BindingList.List<_Command.ICommand>;
@@ -550,9 +549,6 @@ export class _CommandingSurface {
         _ElementUtilities._ensureId(finalTabStop);
         root.appendChild(finalTabStop);
 
-        firstTabStop.setAttribute("x-ms-aria-flowfrom", finalTabStop.id);
-        finalTabStop.setAttribute("aria-flowto", firstTabStop.id);
-
         this._dom = {
             root: root,
             content: content,
@@ -676,20 +672,20 @@ export class _CommandingSurface {
         }
     }
 
-    // _updateTabIndices and _updateTabIndicesImpl are used in tests
-    _updateTabIndices(): void {
-        if (!this._updateTabIndicesThrottled) {
-            this._updateTabIndicesThrottled = _BaseUtils._throttledFunction(100, this._updateTabIndicesImpl.bind(this));
-        }
-        this._updateTabIndicesThrottled();
-    }
-    _updateTabIndicesImpl(): void {
-        // If the CommandingSurface is open, tabbing should carousel within the control.
-        // Make sure our first and last tab stop have focusable tab indices.
-        var nextTabIndex = this._isOpenedMode ? 0 : -1;
-        this._dom.firstTabStop.tabIndex = nextTabIndex;
-        this._dom.finalTabStop.tabIndex = nextTabIndex;
-    }
+    //// _updateTabIndices and _updateTabIndicesImpl are used in tests
+    //_updateTabIndices(): void {
+    //    if (!this._updateTabIndicesThrottled) {
+    //        this._updateTabIndicesThrottled = _BaseUtils._throttledFunction(100, this._updateTabIndicesImpl.bind(this));
+    //    }
+    //    this._updateTabIndicesThrottled();
+    //}
+    //_updateTabIndicesImpl(): void {
+    //    // If the CommandingSurface is open, tabbing should carousel within the control.
+    //    // Make sure our first and last tab stops have focusable tab indices.
+    //    var nextTabIndex = this._isOpenedMode ? 0 : -1;
+    //    this._dom.firstTabStop.tabIndex = nextTabIndex;
+    //    this._dom.finalTabStop.tabIndex = nextTabIndex;
+    //}
 
     private _keyDownHandler(ev: any) {
         if (!ev.altKey) {
@@ -722,10 +718,6 @@ export class _CommandingSurface {
                     case Key.end:
                         var index = focusableElementsInfo.elements.length - 1;
                         targetCommand = this._getLastElementFocus(focusableElementsInfo.elements[index]);
-                        break;
-
-                    case Key.tab:
-                        this._updateTabIndices();
                         break;
                 }
             }
@@ -845,36 +837,47 @@ export class _CommandingSurface {
 
         var _renderDisplayMode = () => {
             var rendered = _renderedState;
+            var dom = this._dom;
 
             if (rendered.isOpenedMode !== this._isOpenedMode) {
                 if (this._isOpenedMode) {
                     // Render opened
-                    removeClass(this._dom.root, _Constants.ClassNames.closedClass);
-                    addClass(this._dom.root, _Constants.ClassNames.openedClass);
+                    removeClass(dom.root, _Constants.ClassNames.closedClass);
+                    addClass(dom.root, _Constants.ClassNames.openedClass);
+
+                    dom.firstTabStop.tabIndex = 0;
+                    dom.finalTabStop.tabIndex = 0;
+                    dom.firstTabStop.setAttribute("x-ms-aria-flowfrom", dom.finalTabStop.id);
+                    dom.finalTabStop.setAttribute("aria-flowto", dom.firstTabStop.id);
                 } else {
                     // Render closed
-                    removeClass(this._dom.root, _Constants.ClassNames.openedClass);
-                    addClass(this._dom.root, _Constants.ClassNames.closedClass);
+                    removeClass(dom.root, _Constants.ClassNames.openedClass);
+                    addClass(dom.root, _Constants.ClassNames.closedClass);
+
+                    dom.firstTabStop.tabIndex = -1;
+                    dom.finalTabStop.tabIndex = -1;
+                    dom.firstTabStop.setAttribute("x-ms-aria-flowfrom", "");
+                    dom.finalTabStop.setAttribute("aria-flowto", "");
                 }
                 rendered.isOpenedMode = this._isOpenedMode;
             }
 
             if (rendered.closedDisplayMode !== this.closedDisplayMode) {
-                removeClass(this._dom.root, closedDisplayModeClassMap[rendered.closedDisplayMode]);
-                addClass(this._dom.root, closedDisplayModeClassMap[this.closedDisplayMode]);
+                removeClass(dom.root, closedDisplayModeClassMap[rendered.closedDisplayMode]);
+                addClass(dom.root, closedDisplayModeClassMap[this.closedDisplayMode]);
                 rendered.closedDisplayMode = this.closedDisplayMode;
             }
 
             if (rendered.overflowDirection !== this.overflowDirection) {
-                removeClass(this._dom.root, overflowDirectionClassMap[rendered.overflowDirection]);
-                addClass(this._dom.root, overflowDirectionClassMap[this.overflowDirection]);
+                removeClass(dom.root, overflowDirectionClassMap[rendered.overflowDirection]);
+                addClass(dom.root, overflowDirectionClassMap[this.overflowDirection]);
                 rendered.overflowDirection = this.overflowDirection;
             }
 
             if (this._overflowAlignmentOffset !== rendered.overflowAlignmentOffset) {
                 var offsetProperty = (this._rtl ? "left" : "right");
                 var offsetTextValue = this._overflowAlignmentOffset + "px";
-                this._dom.overflowAreaContainer.style[offsetProperty] = offsetTextValue;
+                dom.overflowAreaContainer.style[offsetProperty] = offsetTextValue;
             }
         };
 

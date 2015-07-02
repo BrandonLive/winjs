@@ -1732,16 +1732,15 @@ module CorsicaTests {
 
         testTabIndicesWhileClosed() {
             // Commanding surface should not carousel tab key focus movement while closed.
-            // Verify that both the elements we use to trap focus have tabIndex === -1 when 
-            // the tab keydown event fires and the commanding surface is closed.
+            // Verify that both the elements we use to trap focus have tabIndex === -1.
 
             var innerHTML =
                 '<button data-win-control="WinJS.UI.AppBarCommand" data-win-options="{type: \'button\', id:\'button\'}" ></button>' +
                 '<button data-win-control="WinJS.UI.AppBarCommand" data-win-options="{type: \'toggle\', id:\'toggle\'}" ></button>' +
                 '<hr data-win-control="WinJS.UI.AppBarCommand" data-win-options="{type: \'separator\', id:\'separator\'}" \>' +
                 '<div id="contentCmd" data-win-control="WinJS.UI.AppBarCommand" data-win-options="{type: \'content\', id:\'content\'}" >' +
-                '<input type="text" />' +
-                '<input type ="range" / > ' +
+                    '<input type="text" />' +
+                    '<input type ="range" / > ' +
                 '</div>' +
                 '<button data-win-control="WinJS.UI.AppBarCommand" data-win-options="{type: flyout, id:\'flyout\'}" ></button>';
 
@@ -1751,13 +1750,11 @@ module CorsicaTests {
 
             var firstTabStopIndex = -1;
             var finalTabStopIndex = -1;
-            // Tab key will cause the commandingSurface to update its tab indices
-            Helper.keydown(commandingSurface.element, WinJS.Utilities.Key.tab);
             verifyTabIndices(commandingSurface, firstTabStopIndex, finalTabStopIndex);
         }
 
         testTabIndiciesWhileOpened() {
-            // Commanding surface should valid first and last tab stops while opened.
+            // Commanding surface should validate first and last tab stops while opened.
             // This is what allows tab key focus movement to carousel instead of leaving the control.
 
             var innerHTML =
@@ -1765,8 +1762,8 @@ module CorsicaTests {
                 '<button data-win-control="WinJS.UI.AppBarCommand" data-win-options="{type: \'toggle\', id:\'toggle\'}" ></button>' +
                 '<hr data-win-control="WinJS.UI.AppBarCommand" data-win-options="{type: \'separator\', id:\'separator\'}" \>' +
                 '<div id="contentCmd" data-win-control="WinJS.UI.AppBarCommand" data-win-options="{type: \'content\', id:\'content\'}" >' +
-                '<input type="text" />' +
-                '<input type ="range" / > ' +
+                    '<input type="text" />' +
+                    '<input type ="range" / > ' +
                 '</div>' +
                 '<button data-win-control="WinJS.UI.AppBarCommand" data-win-options="{type: flyout, id:\'flyout\'}" ></button>';
 
@@ -1780,10 +1777,26 @@ module CorsicaTests {
             "when the control is opened");
             var firstTabStopIndex = 0;
             var finalTabStopIndex = 0;
-
-            // Tab key will cause the commandingSurface to update its tab indices
-            Helper.keydown(commandingSurface.element, WinJS.Utilities.Key.tab);
             verifyTabIndices(commandingSurface, firstTabStopIndex, finalTabStopIndex);
+        }
+
+        testTabAriaFlow() {
+            var commandingSurface = new _CommandingSurface(this._element, { opened: false });
+            Helper._CommandingSurface.useSynchronousAnimations(commandingSurface);
+
+            LiveUnit.Assert.isFalse(!!commandingSurface._dom.firstTabStop.getAttribute("x-ms-aria-flowfrom"),
+                "aria-flowfrom should be falsey, while closed");
+            LiveUnit.Assert.isFalse(!!commandingSurface._dom.finalTabStop.getAttribute("aria-flowto"),
+                "aria-flowto should be falsey, while closed");
+
+            commandingSurface.opened = true;
+
+            LiveUnit.Assert.areEqual(commandingSurface._dom.finalTabStop.id,
+                commandingSurface._dom.firstTabStop.getAttribute("x-ms-aria-flowfrom"), 
+                "first tab stop should flow from final tab stop, while opened");
+            LiveUnit.Assert.areEqual(commandingSurface._dom.firstTabStop.id,
+                commandingSurface._dom.finalTabStop.getAttribute("aria-flowto"),
+                "final tab stop should flow to first tab stop, while opened");
         }
 
         testDomLevel0_OpenCloseEvents() {

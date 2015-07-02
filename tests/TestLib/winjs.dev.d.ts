@@ -506,8 +506,6 @@ declare module WinJS {
             _layoutCompleteCallback(): any;
             _canMeasure(): boolean;
             _menuCommandProjections: PrivateMenuCommand[];
-            _updateTabIndices();
-            _updateTabIndicesImpl();
         }
 
         class PrivateAppBar extends WinJS.UI.AppBar {
