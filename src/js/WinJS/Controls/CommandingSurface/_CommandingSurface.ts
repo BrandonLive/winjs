@@ -672,21 +672,6 @@ export class _CommandingSurface {
         }
     }
 
-    //// _updateTabIndices and _updateTabIndicesImpl are used in tests
-    //_updateTabIndices(): void {
-    //    if (!this._updateTabIndicesThrottled) {
-    //        this._updateTabIndicesThrottled = _BaseUtils._throttledFunction(100, this._updateTabIndicesImpl.bind(this));
-    //    }
-    //    this._updateTabIndicesThrottled();
-    //}
-    //_updateTabIndicesImpl(): void {
-    //    // If the CommandingSurface is open, tabbing should carousel within the control.
-    //    // Make sure our first and last tab stops have focusable tab indices.
-    //    var nextTabIndex = this._isOpenedMode ? 0 : -1;
-    //    this._dom.firstTabStop.tabIndex = nextTabIndex;
-    //    this._dom.finalTabStop.tabIndex = nextTabIndex;
-    //}
-
     private _keyDownHandler(ev: any) {
         if (!ev.altKey) {
             if (_ElementUtilities._matchesSelector(ev.target, ".win-interactive, .win-interactive *")) {
@@ -845,6 +830,7 @@ export class _CommandingSurface {
                     removeClass(dom.root, _Constants.ClassNames.closedClass);
                     addClass(dom.root, _Constants.ClassNames.openedClass);
 
+                    // Focus should carousel between first and last tab stops while opened.
                     dom.firstTabStop.tabIndex = 0;
                     dom.finalTabStop.tabIndex = 0;
                     dom.firstTabStop.setAttribute("x-ms-aria-flowfrom", dom.finalTabStop.id);
@@ -854,6 +840,7 @@ export class _CommandingSurface {
                     removeClass(dom.root, _Constants.ClassNames.openedClass);
                     addClass(dom.root, _Constants.ClassNames.closedClass);
 
+                    // Focus should not carousel between first and last tab stops while closed.
                     dom.firstTabStop.tabIndex = -1;
                     dom.finalTabStop.tabIndex = -1;
                     dom.firstTabStop.setAttribute("x-ms-aria-flowfrom", "");
