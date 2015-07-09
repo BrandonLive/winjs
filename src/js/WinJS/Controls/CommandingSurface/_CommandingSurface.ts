@@ -1188,6 +1188,13 @@ export class _CommandingSurface {
         });
         this._menuCommandProjections = menuCommandProjections;
 
+        var spacer = _Global.document.createElement("DIV");
+        var style = spacer.style;
+        style.width = "auto";
+        style.height = "24px";
+        style.boxSizing = "border-box"; 
+        this._dom.overflowArea.appendChild(spacer);
+
         _ElementUtilities[hasToggleCommands ? "addClass" : "removeClass"](this._dom.overflowArea, _Constants.ClassNames.menuContainsToggleCommandClass);
 
         this._writeProfilerMark("_layoutCommands,StopTM");
