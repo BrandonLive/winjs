@@ -429,10 +429,10 @@ export interface ICommandingSurfaceTransitionArgs {
     actionAreaClipper: HTMLElement;
     actionArea: HTMLElement;
     overflowAreaClipper: HTMLElement;
-    overflowArea: HTMLElement;
+    overflowAreaViewport: HTMLElement;
     oldHeight: number;
     newHeight: number;
-    overflowAreaHeight: number;
+    overflowAreaViewportHeight: number;
     menuPositionedAbove: boolean;
 }
 

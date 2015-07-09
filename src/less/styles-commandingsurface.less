@@ -117,7 +117,7 @@
 
     .win-commandingsurface-insetoutline {
         /* Display none except in High Contrast scenarios */
-        display:none;
+        display: none;
     }
 
     .win-commandingsurface-overflowareacontainer {
@@ -126,23 +126,36 @@
         right: 0;
         left: auto;
 
-       .RTL({
-            left:0;
-            right:auto;
+        .RTL({
+            left: 0;
+            right: auto;
         });
     }
-    .win-commandingsurface-overflowarea,
-    .win-commandingsurface-overflowareacontainer {
-        min-width: 160px;
-        min-height: 0;
+
+    .win-commandingsurface-overflowareacontainer,
+    .win-commandingsurface-overflowareaviewport {
         max-height: 50vh;
         padding: 0;
     }
+
+    .win-commandingsurface-overflowarea,
+    .win-commandingsurface-overflowareaviewport,
+    .win-commandingsurface-overflowareacontainer {
+        min-width: 160px;
+        min-height: 0;
+    }
+
+    .win-commandingsurface-overflowareaviewport {
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+
     .win-commandingsurface-overflowarea {
         #flex > .display-flex();
         #flex > .flex-direction(column);
-        overflow-y: auto;
-        overflow-x: hidden;
+        overflow: hidden;
+        max-height: none;
+        padding: 0 0 24px 0;
 
         &.win-menu {
             max-width: 480px; /* override max-width styles from WinJS.UI.Menu */
@@ -164,11 +177,11 @@
             margin: 6px 12px 4px 12px;
         }
     }
+
     .win-commandingsurface-actionareacontainer {
         overflow: hidden;
         position: relative;
     }
-
     // Hide the commands (or just command labels, where appropriate) when animating closed, but use opacity: 0 instead of display: none so the layout doesn't
     // get changed and invalidate measurements taken during the animation function.
     &.win-commandingsurface-closing.win-commandingsurface-closeddisplaycompact .win-command .win-label,
@@ -179,8 +192,7 @@
 }
 
 @media(max-width:480px) {
-    .win-commandingsurface .win-commandingsurface-overflowarea.win-menu{
-        width:100vw;
+    .win-commandingsurface .win-commandingsurface-overflowarea.win-menu {
+        width: 100vw;
     }
-
 }

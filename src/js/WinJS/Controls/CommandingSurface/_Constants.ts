@@ -12,6 +12,7 @@ export var ClassNames = {
     spacerCssClass: "win-commandingsurface-spacer",
     ellipsisCssClass: "win-commandingsurface-ellipsis",
     overflowAreaCssClass: "win-commandingsurface-overflowarea",
+    overflowAreaViewportCssClass: "win-commandingsurface-overflowareaviewport",
     overflowAreaContainerCssClass: "win-commandingsurface-overflowareacontainer",
     contentFlyoutCssClass: "win-commandingsurface-contentflyout",
     emptyCommandingSurfaceCssClass: "win-commandingsurface-empty",
