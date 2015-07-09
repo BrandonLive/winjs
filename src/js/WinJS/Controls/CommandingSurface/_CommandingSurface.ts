@@ -157,11 +157,8 @@ export class _CommandingSurface {
         content: HTMLElement;
         actionArea: HTMLElement;
         actionAreaContainer: HTMLElement;
-        actionAreaOutline: HTMLElement;
         overflowArea: HTMLElement;
         overflowAreaContainer: HTMLElement;
-        overflowAreaOutline: HTMLElement;
-        overflowAreaViewport: HTMLElement;
         overflowButton: HTMLButtonElement;
         spacer: HTMLDivElement;
         firstTabStop: HTMLElement;
@@ -423,17 +420,19 @@ export class _CommandingSurface {
         var that = this;
         return {
             execute(): Promise<any> {
-            _ElementUtilities.addClass(that.element, _Constants.ClassNames.openingClass);
-                var openedHeight = that.getBoundingRects().commandingSurface.height;
-                var overflowAreaViewportOpenedHeight = that._dom.overflowAreaViewport.offsetHeight;
+                _ElementUtilities.addClass(that.element, _Constants.ClassNames.openingClass);
+                var boundingRects = that.getBoundingRects();
+                // The overflowAreaContainer has no size by default. Measure the overflowArea's size and apply it to the overflowAreaContainer before animating
+                that._dom.overflowAreaContainer.style.width = boundingRects.overflowArea.width + "px";
+                that._dom.overflowAreaContainer.style.height = boundingRects.overflowArea.height + "px";
                 return Animations._commandingSurfaceOpenAnimation({
                     actionAreaClipper: that._dom.actionAreaContainer,
                     actionArea: that._dom.actionArea,
                     overflowAreaClipper: that._dom.overflowAreaContainer,
-                    overflowAreaViewport: that._dom.overflowAreaViewport,
+                    overflowArea: that._dom.overflowArea,
                     oldHeight: closedHeight,
-                    newHeight: openedHeight,
-                    overflowAreaViewportHeight: overflowAreaViewportOpenedHeight,
+                    newHeight: boundingRects.commandingSurface.height,
+                    overflowAreaHeight: boundingRects.overflowArea.height,
                     menuPositionedAbove: (that.overflowDirection === OverflowDirection.top),
                 }).then(function () {
                         _ElementUtilities.removeClass(that.element, _Constants.ClassNames.openingClass);
@@ -452,9 +451,10 @@ export class _CommandingSurface {
             !this._updateDomImpl.renderedState.isOpenedMode &&
             _Log.log("The CommandingSurface should only attempt to create an closed animation when it's not already closed");
         }
-        var openedHeight = this.getBoundingRects().commandingSurface.height;
-        var overflowAreaViewportOpenedHeight = this._dom.overflowAreaViewport.offsetHeight;
-        var that = this;
+        var openedHeight = this.getBoundingRects().commandingSurface.height,
+            overflowAreaOpenedHeight = this._dom.overflowArea.offsetHeight,
+            oldOverflowTop = this._dom.overflowArea.offsetTop,
+            that = this;
         return {
             execute(): Promise<any> {
                 _ElementUtilities.addClass(that.element, _Constants.ClassNames.closingClass);
@@ -462,10 +462,10 @@ export class _CommandingSurface {
                     actionAreaClipper: that._dom.actionAreaContainer,
                     actionArea: that._dom.actionArea,
                     overflowAreaClipper: that._dom.overflowAreaContainer,
-                    overflowAreaViewport: that._dom.overflowAreaViewport,
+                    overflowArea: that._dom.overflowArea,
                     oldHeight: openedHeight,
                     newHeight: closedHeight,
-                    overflowAreaViewportHeight: overflowAreaViewportOpenedHeight,
+                    overflowAreaHeight: overflowAreaOpenedHeight,
                     menuPositionedAbove: (that.overflowDirection === OverflowDirection.top),
                 }).then(function () {
                         _ElementUtilities.removeClass(that.element, _Constants.ClassNames.closingClass);
@@ -505,13 +505,13 @@ export class _CommandingSurface {
 
         var actionArea = _Global.document.createElement("div");
         _ElementUtilities.addClass(actionArea, _Constants.ClassNames.actionAreaCssClass);
-        var actionAreaOutline = document.createElement("div");
-        _ElementUtilities.addClass(actionAreaOutline, _Constants.ClassNames.insetOutlineClass);
+        var actionAreaInsetOutline = document.createElement("div");
+        _ElementUtilities.addClass(actionAreaInsetOutline, _Constants.ClassNames.insetOutlineClass);
         var actionAreaContainer = _Global.document.createElement("div");
         _ElementUtilities.addClass(actionAreaContainer, _Constants.ClassNames.actionAreaContainerCssClass);
 
         actionAreaContainer.appendChild(actionArea);
-        actionAreaContainer.appendChild(actionAreaOutline);
+        actionAreaContainer.appendChild(actionAreaInsetOutline);
         content.appendChild(actionAreaContainer);
 
         var spacer = _Global.document.createElement("div");
@@ -530,16 +530,13 @@ export class _CommandingSurface {
         var overflowArea = _Global.document.createElement("div");
         _ElementUtilities.addClass(overflowArea, _Constants.ClassNames.overflowAreaCssClass);
         _ElementUtilities.addClass(overflowArea, _Constants.ClassNames.menuCssClass);
-        var overflowAreaOutline = _Global.document.createElement("DIV");
-        _ElementUtilities.addClass(overflowAreaOutline, _Constants.ClassNames.insetOutlineClass);
-        var overflowAreaViewport = _Global.document.createElement("div");
-        _ElementUtilities.addClass(overflowAreaViewport, _Constants.ClassNames.overflowAreaViewportCssClass);
+        var overflowInsetOutline = _Global.document.createElement("DIV");
+        _ElementUtilities.addClass(overflowInsetOutline, _Constants.ClassNames.insetOutlineClass);
         var overflowAreaContainer = _Global.document.createElement("div");
         _ElementUtilities.addClass(overflowAreaContainer, _Constants.ClassNames.overflowAreaContainerCssClass);
 
-        overflowAreaContainer.appendChild(overflowAreaViewport);
-        overflowAreaViewport.appendChild(overflowArea);
-        overflowArea.appendChild(overflowAreaOutline);
+        overflowAreaContainer.appendChild(overflowArea);
+        overflowAreaContainer.appendChild(overflowInsetOutline);
         content.appendChild(overflowAreaContainer);
 
         var firstTabStop = _Global.document.createElement("div");
@@ -557,11 +554,8 @@ export class _CommandingSurface {
             content: content,
             actionArea: actionArea,
             actionAreaContainer: actionAreaContainer,
-            actionAreaOutline: actionAreaOutline,
             overflowArea: overflowArea,
-            overflowAreaViewport: overflowAreaViewport,
             overflowAreaContainer: overflowAreaContainer,
-            overflowAreaOutline: overflowAreaOutline,
             overflowButton: overflowButton,
             spacer: spacer,
             firstTabStop: firstTabStop,
@@ -1157,8 +1151,6 @@ export class _CommandingSurface {
             menuCommand.dispose();
         });
 
-        this._dom.overflowArea.appendChild(this._dom.overflowAreaOutline);
-
         var hasToggleCommands = false,
             menuCommandProjections: _MenuCommand.MenuCommand[] = [];
 
@@ -1354,7 +1346,7 @@ export class _CommandingSurface {
         this._dom.actionAreaContainer.style[transformScriptName] = "";
         this._dom.actionArea.style[transformScriptName] = "";
         this._dom.overflowAreaContainer.style[transformScriptName] = "";
-        this._dom.overflowAreaViewport.style[transformScriptName] = "";
+        this._dom.overflowArea.style[transformScriptName] = "";
     }
 }
 

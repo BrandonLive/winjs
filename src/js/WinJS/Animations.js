@@ -2695,10 +2695,10 @@ define([
             var actionAreaClipper = args.actionAreaClipper,
                 actionArea = args.actionArea,
                 overflowAreaClipper = args.overflowAreaClipper,
-                overflowAreaViewport = args.overflowAreaViewport,
+                overflowArea = args.overflowArea,
                 closedHeight = args.oldHeight,
                 openedHeight = args.newHeight,
-                overflowAreaViewportHeight = args.overflowAreaViewportHeight,
+                overflowAreaHeight = args.overflowAreaHeight,
                 menuPositionedAbove = args.menuPositionedAbove;
             var deltaHeight = openedHeight - closedHeight;
             var actionAreaAnimations = [];
@@ -2731,16 +2731,16 @@ define([
             // Now we set up the overflowArea animations. The overflowArea animation has two parts:
             // The first animation is played on the overflowAreaClipper. This animation is a translation animation that we play that makes it look like the
             // overflow menu is moving up along with the actionArea as it expands.
-            // The next animation is played on the overflowAreaViewport, which we animate up/down by the full size of the overflowAreaViewport. 
-            // When combined, it makes it look like the overflowArea element is sliding in its content while it slides up with the actionArea.
-            // Since the overflowArea viewport and its clipper are in their final positions when this animation function is called, we apply an opposite 
-            // translationto move them both to where they would have been just before the surface opened, then animate them going to translateY(0).
+            // The next animation is played on the overflowArea itself, which we animate up/down by the full size of the overflowArea. 
+            // When combined, it makes it look like the overflowArea is sliding in its content while it slides up with the actionArea.
+            // Since the overflowArea and its clipper are in their final positions when this animation function is called, we apply an opposite translation
+            // to move them both to where they would have been just before the surface opened, then animate them going to translateY(0).
             overflowAreaClipper.style[transformNames.scriptName] = "translateY(" + (menuPositionedAbove ? deltaHeight : -deltaHeight) + "px)";
-            overflowAreaViewport.style[transformNames.scriptName] = "translateY(" + (menuPositionedAbove ? overflowAreaViewportHeight : -overflowAreaViewportHeight) + "px)";
+            overflowArea.style[transformNames.scriptName] = "translateY(" + (menuPositionedAbove ? overflowAreaHeight : -overflowAreaHeight) + "px)";
 
-            // Resolve styles on the overflowAreaViewport and overflowAreaClipper to prepare them for animation
+            // Resolve styles on the overflowArea and overflowAreaClipper to prepare them for animation
             _Global.getComputedStyle(overflowAreaClipper).opacity;
-            _Global.getComputedStyle(overflowAreaViewport).opacity;
+            _Global.getComputedStyle(overflowArea).opacity;
 
             var animationPromises = [];
             for (var i = 0, len = actionAreaAnimations.length; i < len; i++) {
@@ -2748,7 +2748,7 @@ define([
             }
             var overflowAreaTransition = _BaseUtils._merge(transitionToUse, { to: "translateY(0px)" });
             animationPromises.push(transformWithTransition(overflowAreaClipper, overflowAreaTransition));
-            animationPromises.push(transformWithTransition(overflowAreaViewport, overflowAreaTransition));
+            animationPromises.push(transformWithTransition(overflowArea, overflowAreaTransition));
             return Promise.join(animationPromises);
         },
 
@@ -2760,10 +2760,10 @@ define([
             var actionAreaClipper = args.actionAreaClipper,
                 actionArea = args.actionArea,
                 overflowAreaClipper = args.overflowAreaClipper,
-                overflowAreaViewport = args.overflowAreaViewport,
+                overflowArea = args.overflowArea,
                 openedHeight = args.oldHeight,
                 closedHeight = args.newHeight,
-                overflowAreaViewportHeight = args.overflowAreaViewportHeight,
+                overflowAreaHeight = args.overflowAreaHeight,
                 menuPositionedAbove = args.menuPositionedAbove;
             var deltaHeight = closedHeight - openedHeight;
             var actionAreaAnimations = [];
@@ -2784,11 +2784,11 @@ define([
             }
             // Set up
             overflowAreaClipper.style[transformNames.scriptName] = "translateY(0px)";
-            overflowAreaViewport.style[transformNames.scriptName] = "translateY(0px)";
+            overflowArea.style[transformNames.scriptName] = "translateY(0px)";
 
-            // Resolve styles on the overflowAreaViewport and overflowAreaClipper to prepare them for animation
+            // Resolve styles on the overflowArea and overflowAreaClipper to prepare them for animation
             _Global.getComputedStyle(overflowAreaClipper).opacity;
-            _Global.getComputedStyle(overflowAreaViewport).opacity;
+            _Global.getComputedStyle(overflowArea).opacity;
 
             // Now that everything's set up, we can kick off all the animations in unision
             var animationPromises = [];
@@ -2796,9 +2796,9 @@ define([
                 animationPromises.push(transformWithTransition(actionAreaAnimations[i].element, actionAreaAnimations[i].transition));
             }
             var overflowAreaClipperTransition = _BaseUtils._merge(transitionToUse, { to: "translateY(" + (menuPositionedAbove ? -deltaHeight : deltaHeight) + "px)" });
-            var overflowAreaViewportTransition = _BaseUtils._merge(transitionToUse, { to: "translateY(" + (menuPositionedAbove ? overflowAreaViewportHeight : -overflowAreaViewportHeight) + "px)" });
+            var overflowAreaTransition = _BaseUtils._merge(transitionToUse, { to: "translateY(" + (menuPositionedAbove ? overflowAreaHeight : -overflowAreaHeight) + "px)" });
             animationPromises.push(transformWithTransition(overflowAreaClipper, overflowAreaClipperTransition));
-            animationPromises.push(transformWithTransition(overflowAreaViewport, overflowAreaViewportTransition));
+            animationPromises.push(transformWithTransition(overflowArea, overflowAreaTransition));
             return Promise.join(animationPromises);
         }
     });
