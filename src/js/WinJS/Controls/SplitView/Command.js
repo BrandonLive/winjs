@@ -3,6 +3,7 @@ define(['exports',
     '../../Core/_Global',
     '../../Core/_Base',
     '../../Core/_ErrorFromName',
+    '../../Core/_Events',
     '../../ControlProcessor',
     '../../Navigation',
     '../../Utilities/_Control',
@@ -10,7 +11,7 @@ define(['exports',
     '../AppBar/_Icon',
     'require-style!less/styles-splitviewcommand',
     'require-style!less/colors-splitviewcommand'
-], function SplitViewCommandInit(exports, _Global, _Base, _ErrorFromName, ControlProcessor, Navigation, _Control, _ElementUtilities, _Icon) {
+], function SplitViewCommandInit(exports, _Global, _Base, _ErrorFromName, _Events, ControlProcessor, Navigation, _Control, _ElementUtilities, _Icon) {
     "use strict";
 
     _Base.Namespace._moduleDefine(exports, "WinJS.UI", {
@@ -131,7 +132,7 @@ define(['exports',
                 invoked: "invoked",
                 _splitToggle: "_splittoggle",
 
-            }
+            };
 
             var createEvent = _Events._createEventProperty;
 

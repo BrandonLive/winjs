@@ -139,12 +139,15 @@ define([
                     }
                 },
 
+                /// <field type="Function" locid="WinJS.UI.NavBarCommand.oninvoked" helpKeyword="WinJS.UI.NavBar.oninvoked">
+                /// This API supports the Windows Library for JavaScript infrastructure and is not intended to be used directly from your code. 
+                /// </field>
                 oninvoked: {
-                    // Un-inherit this property from our parent class for legacy reasons. 
+                    // Override this this property from our parent class to "un-inherit it".
                     // NavBarCommand uses a private "_invoked" event to communicate with NavBarContainer.
                     // NavBarContainer fires a public "invoked" event when one of its commands has been invoked.
-                    value: undefined,
-                    enumerable: false,
+                    get: function () { return undefined; }, 
+                    enumerable: false 
                 },
 
                 /// <field type="String" locid="WinJS.UI.NavBarCommand.state" helpKeyword="WinJS.UI.NavBarCommand.state">
