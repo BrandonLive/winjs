@@ -157,10 +157,11 @@ export class _CommandingSurface {
         content: HTMLElement;
         actionArea: HTMLElement;
         actionAreaContainer: HTMLElement;
+        actionAreaSpacer: HTMLElement;
+        overflowButton: HTMLButtonElement;
         overflowArea: HTMLElement;
         overflowAreaContainer: HTMLElement;
-        overflowButton: HTMLButtonElement;
-        spacer: HTMLDivElement;
+        overflowAreaSpacer: HTMLElement;
         firstTabStop: HTMLElement;
         finalTabStop: HTMLElement;
     };
@@ -514,9 +515,9 @@ export class _CommandingSurface {
         actionAreaContainer.appendChild(actionAreaInsetOutline);
         content.appendChild(actionAreaContainer);
 
-        var spacer = _Global.document.createElement("div");
-        _ElementUtilities.addClass(spacer, _Constants.ClassNames.spacerCssClass);
-        actionArea.appendChild(spacer);
+        var actionAreaSpacer = _Global.document.createElement("div");
+        _ElementUtilities.addClass(actionAreaSpacer, _Constants.ClassNames.spacerCssClass);
+        actionArea.appendChild(actionAreaSpacer);
 
         var overflowButton = _Global.document.createElement("button");
         overflowButton.tabIndex = 0;
@@ -539,6 +540,11 @@ export class _CommandingSurface {
         overflowAreaContainer.appendChild(overflowInsetOutline);
         content.appendChild(overflowAreaContainer);
 
+
+        var overflowAreaSpacer = _Global.document.createElement("div");
+        _ElementUtilities.addClass(overflowAreaSpacer, _Constants.ClassNames.spacerCssClass);
+        overflowArea.appendChild(overflowAreaSpacer);
+
         var firstTabStop = _Global.document.createElement("div");
         _ElementUtilities.addClass(firstTabStop, _Constants.ClassNames.tabStopClass);
         _ElementUtilities._ensureId(firstTabStop);
@@ -554,10 +560,11 @@ export class _CommandingSurface {
             content: content,
             actionArea: actionArea,
             actionAreaContainer: actionAreaContainer,
+            actionAreaSpacer: actionAreaSpacer,
+            overflowButton: overflowButton,
             overflowArea: overflowArea,
             overflowAreaContainer: overflowAreaContainer,
-            overflowButton: overflowButton,
-            spacer: spacer,
+            overflowAreaSpacer: overflowAreaSpacer,
             firstTabStop: firstTabStop,
             finalTabStop: finalTabStop,
         };
@@ -1187,13 +1194,9 @@ export class _CommandingSurface {
             this._dom.overflowArea.appendChild(command.element);
         });
         this._menuCommandProjections = menuCommandProjections;
-
-        var spacer = _Global.document.createElement("DIV");
-        var style = spacer.style;
-        style.width = "auto";
-        style.height = "24px";
-        style.boxSizing = "border-box"; 
-        this._dom.overflowArea.appendChild(spacer);
+        
+        // Re-append spacer to the end of the oveflowarea
+        this._dom.overflowArea.appendChild(this._dom.overflowAreaSpacer);
 
         _ElementUtilities[hasToggleCommands ? "addClass" : "removeClass"](this._dom.overflowArea, _Constants.ClassNames.menuContainsToggleCommandClass);
 
