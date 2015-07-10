@@ -139,6 +139,14 @@ define([
                     }
                 },
 
+                oninvoked: {
+                    // Un-inherit this property from our parent class for legacy reasons. 
+                    // NavBarCommand uses a private "_invoked" event to communicate with NavBarContainer.
+                    // NavBarContainer fires a public "invoked" event when one of its commands has been invoked.
+                    value: undefined,
+                    enumerable: false,
+                },
+
                 /// <field type="String" locid="WinJS.UI.NavBarCommand.state" helpKeyword="WinJS.UI.NavBarCommand.state">
                 /// Gets or sets the state value used for navigation. The command passes this object to the WinJS.Navigation.navigate function.
                 /// <compatibleWith platform="Windows" minVersion="8.1"/>

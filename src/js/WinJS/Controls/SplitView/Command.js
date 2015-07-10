@@ -133,6 +133,8 @@ define(['exports',
 
             }
 
+            var createEvent = _Events._createEventProperty;
+
             var SplitViewCommand = _Base.Class.define(function SplitViewCommand_ctor(element, options) {
                 /// <signature helpKeyword="WinJS.UI.SplitViewCommand.SplitViewCommand">
                 /// <summary locid="WinJS.UI.SplitViewCommand.constructor">
@@ -247,6 +249,11 @@ define(['exports',
                         }
                     }
                 },
+
+                /// <field type="Function" locid="WinJS.UI.SplitViewCommand.oninvoked" helpKeyword="WinJS.UI.SplitViewCommand.oninvoked">
+                /// Raised when a SplitViewCommand has been invoked.
+                /// </field>
+                oninvoked: createEvent(EventNames.invoked),
 
                 _toggleSplit: function SplitViewCommand_toggleSplit() {
                     this._splitOpened = !this._splitOpened;
