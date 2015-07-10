@@ -127,6 +127,12 @@ define(['exports',
                 commandLabel: "win-splitviewcommand-label"
             };
 
+            var EventNames = {
+                invoked: "invoked",
+                _splitToggle: "_splittoggle",
+
+            }
+
             var SplitViewCommand = _Base.Class.define(function SplitViewCommand_ctor(element, options) {
                 /// <signature helpKeyword="WinJS.UI.SplitViewCommand.SplitViewCommand">
                 /// <summary locid="WinJS.UI.SplitViewCommand.constructor">
@@ -281,10 +287,7 @@ define(['exports',
                         }
                         ev.preventDefault();
                     } else if ((ev.keyCode === Key.space || ev.keyCode === Key.enter) && (ev.target === this._buttonEl || this._buttonEl.contains(ev.target))) {
-                        if (this.location) {
-                            Navigation.navigate(this.location, this.state);
-                        }
-                        this._fireEvent(SplitViewCommand._EventName._invoked);
+                        this._invoke();
                     } else if ((ev.keyCode === Key.space || ev.keyCode === Key.enter) && ev.target === this._splitButtonEl) {
                         this._toggleSplit();
                     }
@@ -343,10 +346,7 @@ define(['exports',
                 _handleButtonClick: function SplitViewCommand_handleButtonClick(ev) {
                     var srcElement = ev.target;
                     if (!_ElementUtilities._matchesSelector(srcElement, ".win-interactive, .win-interactive *")) {
-                        if (this.location) {
-                            Navigation.navigate(this.location, this.state);
-                        }
-                        this._fireEvent(SplitViewCommand._EventName._invoked);
+                        this._invoke();
                     }
                 },
 
@@ -358,6 +358,13 @@ define(['exports',
 
                 _handleSplitButtonClick: function SplitViewCommand_handleSplitButtonClick() {
                     this._toggleSplit();
+                },
+
+                _invoke: function SplitViewCommand_invoke() {
+                    if (this.location) {
+                        Navigation.navigate(this.location, this.state);
+                    }
+                    this._fireEvent(SplitViewCommand._EventName.invoked);
                 },
 
                 _fireEvent: function SplitViewCommand_fireEvent(type, detail) {
@@ -382,10 +389,7 @@ define(['exports',
                 }
             }, {
                 _ClassName: ClassNames,
-                _EventName: {
-                    _invoked: "_invoked",
-                    _splitToggle: "_splittoggle"
-                }
+                _EventName: EventNames,
             });
             _Base.Class.mix(SplitViewCommand, _Control.DOMEventMixin);
             return SplitViewCommand;

@@ -195,7 +195,7 @@ module SplitViewTests {
             var splitViewCommand = <WinJS.UI.PrivateSplitViewCommand>new WinJS.UI.SplitViewCommand(document.getElementById("host"), { label: 'test invoke' });
 
             var invokeCalled = 0;
-            splitViewCommand.addEventListener((<typeof WinJS.UI.PrivateSplitViewCommand>WinJS.UI.SplitViewCommand)._EventName._invoked, function (ev) {
+            splitViewCommand.addEventListener((<typeof WinJS.UI.PrivateSplitViewCommand>WinJS.UI.SplitViewCommand)._EventName.invoked, function (ev) {
                 invokeCalled++;
             });
 

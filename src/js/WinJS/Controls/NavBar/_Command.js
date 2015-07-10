@@ -4,9 +4,10 @@ define([
     '../../Core/_Global',
     '../../Core/_Base',
     '../../Core/_ErrorFromName',
+    '../../Navigation',
     '../../Utilities/_ElementUtilities',
     '../SplitView/Command',
-], function NavBarCommandInit(exports, _Global, _Base, _ErrorFromName, _ElementUtilities, SplitViewCommand) {
+], function NavBarCommandInit(exports, _Global, _Base, _ErrorFromName, Navigation, _ElementUtilities, SplitViewCommand) {
     "use strict";
 
     _Base.Namespace._moduleDefine(exports, "WinJS.UI", {
@@ -192,11 +193,21 @@ define([
                     /// <compatibleWith platform="Windows" minVersion="8.1"/>
                     /// </signature>
                     superClass.dispose.call(this);
+                },
+
+                _invoke: function NavBarCommand_invoke() {
+                if (this.location) {
+                    Navigation.navigate(this.location, this.state);
                 }
+                this._fireEvent(NavBarCommand._EventName._invoked);
+            },
             },
             {
                 _ClassName: ClassNames,
-                _EventName: SplitViewCommand.SplitViewCommand._EventName,
+                _EventName: {
+                    _invoked: "_invoked",
+                    _splitToggle: "_splittoggle",
+                },
             });
             return NavBarCommand;
         })
