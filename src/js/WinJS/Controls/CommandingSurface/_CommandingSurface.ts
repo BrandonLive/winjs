@@ -515,8 +515,13 @@ export class _CommandingSurface {
         actionAreaContainer.appendChild(actionAreaInsetOutline);
         content.appendChild(actionAreaContainer);
 
+        // This element helps us work around cross browser flexbox bugs where some browsers will:
+        //  1. Collapse the action area.
+        //  2. Push overflowbutton outside of the action area's clipping rect.
+        // when there are no primary commands in the action area but there IS a visible overflow button.
         var actionAreaSpacer = _Global.document.createElement("div");
         _ElementUtilities.addClass(actionAreaSpacer, _Constants.ClassNames.spacerCssClass);
+        actionAreaSpacer.tabIndex = -1;
         actionArea.appendChild(actionAreaSpacer);
 
         var overflowButton = _Global.document.createElement("button");
@@ -540,9 +545,11 @@ export class _CommandingSurface {
         overflowAreaContainer.appendChild(overflowInsetOutline);
         content.appendChild(overflowAreaContainer);
 
-
+        // This element is always placed at the end of the overflow area and is used to provide a better
+        // "end of scrollable region" visual.
         var overflowAreaSpacer = _Global.document.createElement("div");
         _ElementUtilities.addClass(overflowAreaSpacer, _Constants.ClassNames.spacerCssClass);
+        overflowAreaSpacer.tabIndex = -1;
         overflowArea.appendChild(overflowAreaSpacer);
 
         var firstTabStop = _Global.document.createElement("div");
