@@ -820,6 +820,13 @@ export declare function getRelativeLeft(element: HTMLElement, parent: HTMLElemen
 export declare function getRelativeTop(element: HTMLElement, parent: HTMLElement): number;
 
 /**
+    * Gets the scroll position of the element, taking RTL into consideration.
+    * @param element The element.
+    * @returns An object with left and top scroll positions.
+**/
+export declare function getScrollPosition(element: HTMLElement): { scrollLeft: number; scrollTop: number; }
+
+/**
     * Gets the height of the element, including its margins.
     * @param element The element.
     * @returns The height of the element including margins.
@@ -938,6 +945,13 @@ export declare function setOuterHTML(element: HTMLElement, text: string): void;
 export declare function setOuterHTMLUnsafe(element: HTMLElement, text: string): void;
 
 /**
+    * Sets the scroll position of the element, taking RTL into consideration.
+    * @param element The element.
+    * @param position The scroll position.
+**/
+export declare function setScrollPosition(element: HTMLElement, position: { scrollLeft?: number; scrollTop?: number; }): void;
+
+/**
     * Configures a logger that writes messages containing the specified tags to the JavaScript console.
     * @param options The tags for messages to log. Multiple tags should be separated by spaces. May contain type, tags, excludeTags and action properties.
 **/
@@ -1012,11 +1026,12 @@ export declare module _resizeNotifier {
 }
 
 export declare module _inputPaneListener {
-    export function addEventListener(element: HTMLElement, event: string,  handler: (ev: any) => any): void;
+    export function addEventListener(element: HTMLElement, event: string, handler: (ev: any) => any): void;
     export function removeEventListener(element: HTMLElement, event: string, handler: (ev: any) => any): void;
 }
 
-
+export declare function _getHighAndLowTabIndices(element: HTMLElement): { highest: number; lowest: number };
+export declare function _elementsFromPoint(x: number, y: number): NodeList;
 export declare function _addInsertedNotifier(element: HTMLElement): void;
 export declare function _inDom(element: HTMLElement): Promise<any>;
 export declare function _reparentChildren(originalParent: HTMLElement, destinationParent: HTMLElement): void;
@@ -1027,11 +1042,14 @@ export declare function _removeEventListener(element: HTMLElement, type: string,
 export declare function _removeEventListener(element: Window, type: string, listener: EventListener, useCapture?: boolean): void;
 export declare function _maintainFocus(callback: Function): void;
 export declare function _setActive(element: HTMLElement, scroller?: HTMLElement): boolean;
+export declare function _setActiveFirstFocusableElement(element: HTMLElement): any;
+export declare function _syncRenderer(renderFunc: Function): (dataContext: any, element: HTMLElement) => void;
 export declare function _tryFocusOnAnyElement(elem: HTMLElement, useSetActive?: boolean, scroller?: HTMLElement): boolean;
 export declare function _trySetActiveOnAnyElement(elem: HTMLElement, scroller?: HTMLElement): boolean;
 export declare function _tryFocus(elem: HTMLElement, useSetActive?: boolean, scroller?: HTMLElement): boolean;
 export declare function _trySetActive(elem: HTMLElement, scroller?: HTMLElement): boolean;
 export declare function _focusFirstFocusableElement(rootEl: HTMLElement, useSetActive?: boolean, scroller?: HTMLElement): boolean;
+export declare function _focusLastFocusableElement(rootEl: HTMLElement, useSetActive?: boolean, scroller?: HTMLElement): boolean;
 export declare function _setPointerCapture(element: HTMLElement, pointerId: number): void;
 export declare function _releasePointerCapture(element: HTMLElement, pointerId: number): void;
 export declare function _convertToPrecisePixels(value: string): number;
@@ -1044,5 +1062,23 @@ export declare function _ensureId(element: HTMLElement): void;
 export declare function _setAttribute(element: HTMLElement, attribute: string, value: string): void;
 export declare var _MutationObserver: {
     prototype: IMutationObserverShim;
-    new(callback: (mutations: IMutationRecordShim[]) => void): IMutationObserverShim;
+    new (callback: (mutations: IMutationRecordShim[]) => void): IMutationObserverShim;
 };
+export declare var _supportsSnapPoints: boolean;
+export declare var _supportsTouchDetection: boolean;
+
+export declare module _MSPointerEvent {
+    export var MSPOINTER_TYPE_MOUSE: string;
+    export var MSPOINTER_TYPE_TOUCH: string;
+}
+
+export declare enum _MSManipulationEvent {
+    MS_MANIPULATION_STATE_ACTIVE,
+    MS_MANIPULATION_STATE_CANCELLED,
+    MS_MANIPULATION_STATE_COMMITTED,
+    MS_MANIPULATION_STATE_DRAGGING,
+    MS_MANIPULATION_STATE_INERTIA,
+    MS_MANIPULATION_STATE_PRESELECT,
+    MS_MANIPULATION_STATE_SELECTING,
+    MS_MANIPULATION_STATE_STOPPED
+}

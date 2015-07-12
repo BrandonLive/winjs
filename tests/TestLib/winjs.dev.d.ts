@@ -128,6 +128,7 @@ declare module WinJS {
     }
 
     module Application {
+        var _applicationListener: any;
         var _terminateApp: (data: any, e: any) => void;
         function _dispatchEvent(eventRecord: any): void;
         function _loadState(e: any);
@@ -295,6 +296,15 @@ declare module WinJS {
             _onAriaExpandedPropertyChanged(mutations: IMutationRecordShim[]): void;
             _invoked(): void;
             _disposed: boolean;
+        }
+
+        class PrivateSplitViewCommand extends SplitViewCommand {
+            _buttonEl:  HTMLElement;
+            _disposed: boolean;
+            static _EventName: {
+                _invoked: string;
+                _splitToggle: string;
+            };
         }
 
         interface ISelect {
@@ -498,6 +508,8 @@ declare module WinJS {
                 overflowButton: HTMLButtonElement;
                 overflowArea: HTMLElement;
                 overflowAreaContainer: HTMLElement;
+                firstTabStop: HTMLElement;
+                finalTabStop: HTMLElement;
             };
             _machine: IOpenCloseMachine;
             _batchDataUpdates(updateFn: () => void): void;
@@ -653,6 +665,8 @@ declare module WinJS {
             sections: WinJS.Binding.List<PrivateHubSection>;
             _viewportElement;
 
+            _isInteractive(element: Element): boolean;
+
             static _EventName;
             static _ClassName;
             static LoadingState;
@@ -687,14 +701,12 @@ declare module WinJS {
             _headerItemsElement;
             _headersState;
             forceLayout();
-            _navMode;
-            _currentScrollTargetLocation;
-            _viewportWidth;
-            _headerItemsWidth: number;
 
-            static _ClassName;
-            static _EventName;
-            static _NavigationModes;
+            _getHeaderItemsWidth(): number;
+            _getViewportWidth(): number;
+
+            static _ClassNames;
+            static _EventNames;
         }
 
         class PrivatePivotItem extends PivotItem {
