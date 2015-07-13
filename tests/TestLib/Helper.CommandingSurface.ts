@@ -13,7 +13,8 @@ module Helper._CommandingSurface {
             (args.numStandardCommands || 0) * _Constants.actionAreaCommandWidth +
             (args.numSeparators || 0) * _Constants.actionAreaSeparatorWidth +
             (args.additionalWidth || 0) +
-            (args.visibleOverflowButton ? _Constants.actionAreaOverflowButtonWidth : 0);
+            //(args.visibleOverflowButton ? _Constants.actionAreaOverflowButtonWidth : 0);
+            _Constants.actionAreaOverflowButtonWidth;
 
         element.style.width = width + "px";
     }

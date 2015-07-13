@@ -570,7 +570,7 @@ export class _CommandingSurface {
         };
 
         var elementsInReach = Array.prototype.slice.call(this._dom.actionArea.children);
-        if (this._dom.overflowArea.style.display !== "none") {
+        if (this._isOpenedMode) {
             elementsInReach = elementsInReach.concat(Array.prototype.slice.call(this._dom.overflowArea.children));
         }
 
