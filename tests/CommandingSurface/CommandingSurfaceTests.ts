@@ -1290,7 +1290,7 @@ module CorsicaTests {
             });
         }
 
-        xtestKeyboarding_Closed(complete) { // TODO reenable when new keyboarding model is decided.
+        testKeyboarding_Closed(complete) {
             var Key = WinJS.Utilities.Key;
             var firstEL = document.createElement("button");
             var data = new WinJS.Binding.List([
@@ -1310,7 +1310,6 @@ module CorsicaTests {
 
             var args: Helper._CommandingSurface.ISizeForCommandsArgs = {
                 numStandardCommands: 3,
-                
             };
             Helper._CommandingSurface.sizeForCommands(this._element, args);
             commandingSurface.forceLayout();
@@ -1320,16 +1319,16 @@ module CorsicaTests {
             setTimeout(function () {
                 Helper.keydown(commandingSurface.element, Key.downArrow);
                 LiveUnit.Assert.areEqual(firstEL, document.activeElement);
-                LiveUnit.Assert.areEqual("1", document.activeElement.textContent);
+                LiveUnit.Assert.areEqual("1", document.activeElement.winControl.label);
 
                 Helper.keydown(commandingSurface.element, Key.end);
                 LiveUnit.Assert.areEqual(commandingSurface._dom.overflowButton, document.activeElement);
 
                 Helper.keydown(commandingSurface.element, Key.home);
-                LiveUnit.Assert.areEqual("1", document.activeElement.textContent);
+                LiveUnit.Assert.areEqual("1", document.activeElement.winControl.label);
 
                 Helper.keydown(commandingSurface.element, Key.rightArrow);
-                LiveUnit.Assert.areEqual("3", document.activeElement.textContent, "Right arrow, should skip '2' because that command is disabled");
+                LiveUnit.Assert.areEqual("3", document.activeElement.winControl.label, "Right arrow, should skip '2' because that command is disabled");
 
                 Helper.keydown(commandingSurface.element, Key.downArrow);
                 LiveUnit.Assert.areEqual(commandingSurface._dom.overflowButton, document.activeElement);
@@ -1338,10 +1337,10 @@ module CorsicaTests {
                 LiveUnit.Assert.areEqual(commandingSurface._dom.overflowButton, document.activeElement);
 
                 Helper.keydown(commandingSurface.element, Key.leftArrow);
-                LiveUnit.Assert.areEqual("3", document.activeElement.textContent);
+                LiveUnit.Assert.areEqual("3", document.activeElement.winControl.label);
 
                 Helper.keydown(commandingSurface.element, Key.upArrow);
-                LiveUnit.Assert.areEqual("1", document.activeElement.textContent, "Up arrow, should skip '2' because that command is disabled");
+                LiveUnit.Assert.areEqual("1", document.activeElement.winControl.label, "Up arrow, should skip '2' because that command is disabled");
                 complete();
             });
         }
