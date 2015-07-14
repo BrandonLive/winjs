@@ -30,7 +30,7 @@ import _WriteProfilerMark = require("../../Core/_WriteProfilerMark");
 require(["require-style!less/styles-commandingsurface"]);
 require(["require-style!less/colors-commandingsurface"]);
 
-"use strict";
+"use strict
 
 interface ICommandInfo {
     command: _Command.ICommand;
@@ -515,10 +515,10 @@ export class _CommandingSurface {
         actionAreaContainer.appendChild(actionAreaInsetOutline);
         content.appendChild(actionAreaContainer);
 
-        // This element helps us work around cross browser flexbox bugs where some browsers will:
+        // This element helps us work around cross browser flexbox bugs. When there are no primary
+        // commands in the action area but there IS a visible overflow button, some browsers will:
         //  1. Collapse the action area.
         //  2. Push overflowbutton outside of the action area's clipping rect.
-        // when there are no primary commands in the action area but there IS a visible overflow button.
         var actionAreaSpacer = _Global.document.createElement("div");
         _ElementUtilities.addClass(actionAreaSpacer, _Constants.ClassNames.spacerCssClass);
         actionAreaSpacer.tabIndex = -1;
