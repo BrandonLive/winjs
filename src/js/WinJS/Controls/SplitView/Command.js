@@ -5,13 +5,12 @@ define(['exports',
     '../../Core/_ErrorFromName',
     '../../Core/_Events',
     '../../ControlProcessor',
-    '../../Navigation',
     '../../Utilities/_Control',
     '../../Utilities/_ElementUtilities',
     '../AppBar/_Icon',
     'require-style!less/styles-splitviewcommand',
     'require-style!less/colors-splitviewcommand'
-], function SplitViewCommandInit(exports, _Global, _Base, _ErrorFromName, _Events, ControlProcessor, Navigation, _Control, _ElementUtilities, _Icon) {
+], function SplitViewCommandInit(exports, _Global, _Base, _ErrorFromName, _Events, ControlProcessor, _Control, _ElementUtilities, _Icon) {
     "use strict";
 
     _Base.Namespace._moduleDefine(exports, "WinJS.UI", {
@@ -369,9 +368,6 @@ define(['exports',
                 },
 
                 _invoke: function SplitViewCommand_invoke() {
-                    if (this.location) {
-                        Navigation.navigate(this.location, this.state);
-                    }
                     this._fireEvent(SplitViewCommand._EventName.invoked);
                 },
 

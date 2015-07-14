@@ -146,8 +146,8 @@ define([
                     // Override this this property from our parent class to "un-inherit it".
                     // NavBarCommand uses a private "_invoked" event to communicate with NavBarContainer.
                     // NavBarContainer fires a public "invoked" event when one of its commands has been invoked.
-                    get: function () { return undefined; }, 
-                    enumerable: false 
+                    get: function () { return undefined; },
+                    enumerable: false
                 },
 
                 /// <field type="String" locid="WinJS.UI.NavBarCommand.state" helpKeyword="WinJS.UI.NavBarCommand.state">
@@ -207,11 +207,11 @@ define([
                 },
 
                 _invoke: function NavBarCommand_invoke() {
-                if (this.location) {
-                    Navigation.navigate(this.location, this.state);
-                }
-                this._fireEvent(NavBarCommand._EventName._invoked);
-            },
+                    if (this.location) {
+                        Navigation.navigate(this.location, this.state);
+                    }
+                    this._fireEvent(NavBarCommand._EventName._invoked);
+                },
             },
             {
                 _ClassName: ClassNames,
