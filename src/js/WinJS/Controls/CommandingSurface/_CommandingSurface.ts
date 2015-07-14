@@ -30,7 +30,7 @@ import _WriteProfilerMark = require("../../Core/_WriteProfilerMark");
 require(["require-style!less/styles-commandingsurface"]);
 require(["require-style!less/colors-commandingsurface"]);
 
-"use strict
+"use strict"
 
 interface ICommandInfo {
     command: _Command.ICommand;
