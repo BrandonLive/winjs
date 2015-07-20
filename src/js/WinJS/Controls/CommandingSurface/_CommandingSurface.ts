@@ -405,6 +405,10 @@ export class _CommandingSurface {
         }
     }
 
+    takeFocus(useSetActive: boolean): void {
+        _ElementUtilities._focusFirstFocusableElement(this._dom.content, useSetActive);
+    }
+
     deferredDomUpate(): void {
         // Notify the machine that an update has been requested.
         this._machine.updateDom();
