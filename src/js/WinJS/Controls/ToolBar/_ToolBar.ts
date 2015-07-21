@@ -83,8 +83,8 @@ export class ToolBar {
     private _disposed: boolean;
     private _commandingSurface: _ICommandingSurface._CommandingSurface;
     private _isOpenedMode: boolean;
-    private _handleShowingKeyboardBound: (ev: any) => void
-     _dismissable: _LightDismissService.LightDismissableElement;
+    private _handleShowingKeyboardBound: (ev: any) => void;
+    private _dismissable: _LightDismissService.LightDismissableElement;
     private _cachedClosedHeight: number;
 
     private _dom: {
