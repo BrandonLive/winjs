@@ -406,7 +406,7 @@ export class _CommandingSurface {
     }
 
     takeFocus(useSetActive: boolean): void {
-        _ElementUtilities._focusFirstFocusableElement(this._dom.content, useSetActive);
+        return _ElementUtilities._focusFirstFocusableElement(this._dom.content, useSetActive);
     }
 
     deferredDomUpate(): void {
