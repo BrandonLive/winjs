@@ -411,7 +411,7 @@ export class _CommandingSurface {
     }
 
     private _focusLastFocusableElementOrThis(useSetActive: boolean): void {
-        _ElementUtilities._focusFirstFocusableElement(this._dom.content, useSetActive) ||
+        _ElementUtilities._focusLastFocusableElement(this._dom.content, useSetActive) ||
         _ElementUtilities._tryFocusOnAnyElement(this.element, useSetActive);
     }
 
@@ -1211,7 +1211,7 @@ export class _CommandingSurface {
             this._dom.overflowArea.appendChild(command.element);
         });
         this._menuCommandProjections = menuCommandProjections;
-        
+
         // Re-append spacer to the end of the oveflowarea
         this._dom.overflowArea.appendChild(this._dom.overflowAreaSpacer);
 
