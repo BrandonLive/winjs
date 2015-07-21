@@ -306,8 +306,8 @@ export class _CommandingSurface {
         // Event handlers
         _ElementUtilities._resizeNotifier.subscribe(this._dom.root, this._resizeHandlerBound);
         this._dom.root.addEventListener('keydown', this._keyDownHandler.bind(this));
-        _ElementUtilities._addEventListener(this._dom.firstTabStop, "focusin", () => { this._focusFirstFocusableElementOrThis(false); });
-        _ElementUtilities._addEventListener(this._dom.finalTabStop, "focusin", () => { this._focusLastFocusableElementOrThis(false); });
+        _ElementUtilities._addEventListener(this._dom.firstTabStop, "focusin", () => { this._focusLastFocusableElementOrThis(false); });
+        _ElementUtilities._addEventListener(this._dom.finalTabStop, "focusin", () => { this._focusFirstFocusableElementOrThis(false); });
 
         // Exit the Init state.
         _ElementUtilities._inDom(this._dom.root).then(() => {
