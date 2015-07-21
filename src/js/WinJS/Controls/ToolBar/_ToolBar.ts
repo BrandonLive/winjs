@@ -207,8 +207,7 @@ export class ToolBar {
             },
             onTakeFocus: (useSetActive) => {
                 this._dismissable.restoreFocus() ||
-                this._commandingSurface.takeFocus(useSetActive) ||
-                _ElementUtilities._tryFocusOnAnyElement(this.element, useSetActive);
+                this._commandingSurface.takeFocus(useSetActive);
             }
         });
 

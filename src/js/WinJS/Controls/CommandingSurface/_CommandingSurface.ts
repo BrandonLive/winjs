@@ -307,10 +307,12 @@ export class _CommandingSurface {
         _ElementUtilities._resizeNotifier.subscribe(this._dom.root, this._resizeHandlerBound);
         this._dom.root.addEventListener('keydown', this._keyDownHandler.bind(this));
         _ElementUtilities._addEventListener(this._dom.firstTabStop, "focusin", () => {
-            _ElementUtilities._focusLastFocusableElement(this._dom.content);
+            _ElementUtilities._focusLastFocusableElement(this._dom.content) || 
+            _ElementUtilities._tryFocusOnAnyElement(this._dom.content);
         });
         _ElementUtilities._addEventListener(this._dom.finalTabStop, "focusin", () => {
-            _ElementUtilities._focusFirstFocusableElement(this._dom.content);
+            _ElementUtilities._focusFirstFocusableElement(this._dom.content) ||
+            _ElementUtilities._tryFocusOnAnyElement(this._dom.content);
         });
 
         // Exit the Init state.
@@ -406,7 +408,8 @@ export class _CommandingSurface {
     }
 
     takeFocus(useSetActive: boolean): void {
-        return _ElementUtilities._focusFirstFocusableElement(this._dom.content, useSetActive);
+        _ElementUtilities._focusFirstFocusableElement(this._dom.content, useSetActive) ||
+        _ElementUtilities._tryFocusOnAnyElement(this._dom.content, useSetActive);
     }
 
     deferredDomUpate(): void {
