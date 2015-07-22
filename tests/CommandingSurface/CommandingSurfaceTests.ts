@@ -84,6 +84,62 @@ module CorsicaTests {
     interface IOverflowButtonVisibilityTestCase {
         name: string; commands: Array<WinJS.UI.PrivateCommand>; expectsOverflowCommands: boolean;
     }
+    var visibleOverflowButton_Helpers = {
+        verifyOverflowButton: function verifyOverflowButton(commandingSurface: WinJS.UI.PrivateCommandingSurface) {
+
+            var hasOverflowButton = this.isOverflowButtonVisible(commandingSurface);
+            var hasOverflowAreaCommands = this.areCommandsInOverflowArea(commandingSurface);
+            var hasExandableActionArea = this.isActionAreaExpandable(commandingSurface);
+            var mode = commandingSurface.closedDisplayMode;
+
+            if (hasExandableActionArea) {
+                // Should always have an overflow button.
+                LiveUnit.Assert.areEqual(true, hasOverflowButton,
+                    "Overflow button should be visible when closedDisplayMode = " + mode);
+            } else {
+                // Should only have an overflow button if there are commands in the overflowarea.
+                if (hasOverflowAreaCommands) {
+                    LiveUnit.Assert.areEqual(true, hasOverflowButton,
+                        "Overflow button should be visible when closedDisplayMode = " + mode + ", and there ARE commands in the overflowArea");
+                } else {
+                    LiveUnit.Assert.areEqual(false, hasOverflowButton,
+                        "Overflow button should be hidden when closedDisplayMode = " + mode + ", and there are NO commands in the overflowArea");
+                }
+            }
+        },
+        isOverflowButtonVisible: function isOverflowButtonVisible(commandingSurface: WinJS.UI.PrivateCommandingSurface) {
+            var overflowButton = commandingSurface._dom.overflowButton;
+            return overflowButton.style.display !== "none";
+        },
+        areCommandsInOverflowArea: function areCommandsInOverflowArea(commandingSurface: WinJS.UI.PrivateCommandingSurface) {
+            var overflowArea = commandingSurface._dom.overflowArea;
+            var overflowAreaCommands = Helper._CommandingSurface.getVisibleCommandsInElement(overflowArea);
+            return overflowAreaCommands.length > 0;
+        },
+        isActionAreaExpandable: function isActionAreaExpandable(commandingSurface: WinJS.UI.PrivateCommandingSurface) {
+            var result;
+            var mode = commandingSurface.closedDisplayMode;
+            switch (mode) {
+                case _CommandingSurface.ClosedDisplayMode.none:
+                case _CommandingSurface.ClosedDisplayMode.minimal:
+                case _CommandingSurface.ClosedDisplayMode.compact:
+                    // These ClosedDisplayModes have an expandable actionarea when shown.
+                    result = true;
+                    break;
+                case _CommandingSurface.ClosedDisplayMode.full:
+                    // These ClosedDisplayModes do not have an expandable actionarea when shown.
+                    result = false;
+                    break;
+                default:
+                    LiveUnit.Assert.fail("TEST ERROR: Unknown ClosedDisplayMode enum value: " + mode);
+                    break;
+            }
+
+            return result;
+        },
+
+    }
+
 
     export class _CommandingSurfaceTests {
         "use strict";
@@ -353,62 +409,88 @@ module CorsicaTests {
         //    LiveUnit.Assert.areNotEqual("none", getComputedStyle(commandingSurface._dom.overflowButton).display, "Overflow button should be visible when the primary commands overflow");
         //}
 
-        testOverflowButtonVisibility(complete) {
+        testOverflowButtonVisibilityWhenChangingData(complete) {
 
-            var locals = {
-                verifyOverflowButton: function verifyOverflowButton(commandingSurface: WinJS.UI.PrivateCommandingSurface) {
+            //var locals = {
+            //    verifyOverflowButton: function verifyOverflowButton(commandingSurface: WinJS.UI.PrivateCommandingSurface) {
 
-                    var hasOverflowButton = locals.isOverflowButtonVisible(commandingSurface);
-                    var hasOverflowAreaCommands = locals.areCommandsInOverflowArea(commandingSurface);
-                    var hasExandableActionArea = locals.isActionAreaExpandable(commandingSurface);
-                    var mode = commandingSurface.closedDisplayMode;
+            //        var hasOverflowButton = locals.isOverflowButtonVisible(commandingSurface);
+            //        var hasOverflowAreaCommands = locals.areCommandsInOverflowArea(commandingSurface);
+            //        var hasExandableActionArea = locals.isActionAreaExpandable(commandingSurface);
+            //        var mode = commandingSurface.closedDisplayMode;
 
-                    if (hasExandableActionArea) {
-                        // Should always have an overflow button.
-                        LiveUnit.Assert.areEqual(true, hasOverflowButton,
-                            "Overflow button should be visible when closedDisplayMode = " + mode);
-                    } else {
-                        // Should only have an overflow button if there are commands in the overflowarea.
-                        if (hasOverflowAreaCommands) {
-                            LiveUnit.Assert.areEqual(true, hasOverflowButton,
-                                "Overflow button should be visible when closedDisplayMode = " + mode + ", and there ARE commands in the overflowArea");
-                        } else {
-                            LiveUnit.Assert.areEqual(false, hasOverflowButton,
-                                "Overflow button should be hidden when closedDisplayMode = " + mode + ", and there are NO commands in the overflowArea");
-                        }
-                    }
-                },
-                isOverflowButtonVisible: function isOverflowButtonVisible(commandingSurface: WinJS.UI.PrivateCommandingSurface) {
-                    var overflowButton = commandingSurface._dom.overflowButton;
-                    return overflowButton.style.display !== "none";
-                },
-                areCommandsInOverflowArea: function areCommandsInOverflowArea(commandingSurface: WinJS.UI.PrivateCommandingSurface) {
-                    var overflowArea = commandingSurface._dom.overflowArea;
-                    var overflowAreaCommands = Helper._CommandingSurface.getVisibleCommandsInElement(overflowArea);
-                    return overflowAreaCommands.length > 0;
-                },
-                isActionAreaExpandable: function isActionAreaExpandable(commandingSurface: WinJS.UI.PrivateCommandingSurface) {
-                    var result;
-                    var mode = commandingSurface.closedDisplayMode;
-                    switch (mode) {
-                        case _CommandingSurface.ClosedDisplayMode.none:
-                        case _CommandingSurface.ClosedDisplayMode.minimal:
-                        case _CommandingSurface.ClosedDisplayMode.compact:
-                            // These ClosedDisplayModes have an expandable actionarea when shown.
-                            result = true;
-                            break;
-                        case _CommandingSurface.ClosedDisplayMode.full:
-                            // These ClosedDisplayModes do not have an expandable actionarea when shown.
-                            result = false;
-                            break;
-                        default:
-                            LiveUnit.Assert.fail("TEST ERROR: Unknown ClosedDisplayMode enum value: " + mode);
-                            break;
-                    }
+            //        if (hasExandableActionArea) {
+            //            // Should always have an overflow button.
+            //            LiveUnit.Assert.areEqual(true, hasOverflowButton,
+            //                "Overflow button should be visible when closedDisplayMode = " + mode);
+            //        } else {
+            //            // Should only have an overflow button if there are commands in the overflowarea.
+            //            if (hasOverflowAreaCommands) {
+            //                LiveUnit.Assert.areEqual(true, hasOverflowButton,
+            //                    "Overflow button should be visible when closedDisplayMode = " + mode + ", and there ARE commands in the overflowArea");
+            //            } else {
+            //                LiveUnit.Assert.areEqual(false, hasOverflowButton,
+            //                    "Overflow button should be hidden when closedDisplayMode = " + mode + ", and there are NO commands in the overflowArea");
+            //            }
+            //        }
+            //    },
+            //    isOverflowButtonVisible: function isOverflowButtonVisible(commandingSurface: WinJS.UI.PrivateCommandingSurface) {
+            //        var overflowButton = commandingSurface._dom.overflowButton;
+            //        return overflowButton.style.display !== "none";
+            //    },
+            //    areCommandsInOverflowArea: function areCommandsInOverflowArea(commandingSurface: WinJS.UI.PrivateCommandingSurface) {
+            //        var overflowArea = commandingSurface._dom.overflowArea;
+            //        var overflowAreaCommands = Helper._CommandingSurface.getVisibleCommandsInElement(overflowArea);
+            //        return overflowAreaCommands.length > 0;
+            //    },
+            //    isActionAreaExpandable: function isActionAreaExpandable(commandingSurface: WinJS.UI.PrivateCommandingSurface) {
+            //        var result;
+            //        var mode = commandingSurface.closedDisplayMode;
+            //        switch (mode) {
+            //            case _CommandingSurface.ClosedDisplayMode.none:
+            //            case _CommandingSurface.ClosedDisplayMode.minimal:
+            //            case _CommandingSurface.ClosedDisplayMode.compact:
+            //                // These ClosedDisplayModes have an expandable actionarea when shown.
+            //                result = true;
+            //                break;
+            //            case _CommandingSurface.ClosedDisplayMode.full:
+            //                // These ClosedDisplayModes do not have an expandable actionarea when shown.
+            //                result = false;
+            //                break;
+            //            default:
+            //                LiveUnit.Assert.fail("TEST ERROR: Unknown ClosedDisplayMode enum value: " + mode);
+            //                break;
+            //        }
 
-                    return result;
-                },
-            };
+            //        return result;
+            //    },
+            //};
+
+            function verifyPreCondition(commandingSurface: WinJS.UI.PrivateCommandingSurface, testCase: IOverflowButtonVisibilityTestCase) {
+                var hasOverflowAreaCommands = visibleOverflowButton_Helpers.areCommandsInOverflowArea(commandingSurface);
+                var mode = commandingSurface.closedDisplayMode;
+
+                switch (mode) {
+                    case _CommandingSurface.ClosedDisplayMode.compact:
+                    case _CommandingSurface.ClosedDisplayMode.full:
+                        LiveUnit.Assert.isTrue(commandingSurface._canMeasure(),
+                            "TEST ERROR: Closed CommandingSurface with closedDisplayMode:" + mode + " is unable to measure. Layout is blocked.");
+                        LiveUnit.Assert.areEqual(testCase.expectsOverflowCommands, hasOverflowAreaCommands,
+                            "TEST ERROR: Configuration for test: " + testCase.name + " with closedDisplayMode: " + mode +
+                            " has incorrect presence of commands in overflowarea");
+                        break;
+                    case _CommandingSurface.ClosedDisplayMode.minimal:
+                    case _CommandingSurface.ClosedDisplayMode.none:
+                        LiveUnit.Assert.isFalse(commandingSurface._canMeasure(),
+                            "TEST ERROR: Test expects that a closed CommandingSurface with closedDisplayMode: " + mode +
+                            " can't measure or peform layout. Update the test to include '" + mode + "' with the closedDisplayModes" +
+                            " that can be measured while closed.");
+                        break;
+                    default:
+                        LiveUnit.Assert.fail("TEST ERROR: Unknown ClosedDisplayMode enum value: " + mode);
+                        break;
+                }
+            }
 
             var commandingSurface = new _CommandingSurface(this._element, {});
             var controlWidth = 500;
@@ -440,32 +522,11 @@ module CorsicaTests {
 
                         commandingSurface.data = new WinJS.Binding.List(testCase.commands);
 
-                        var hasOverflowAreaCommands = locals.areCommandsInOverflowArea(commandingSurface);
-
                         // PRECONDITION: Sanity test that the testCase's expected configuration for overflow commands 
                         // has been met.
-                        switch (commandingSurface.closedDisplayMode) {
-                            case _CommandingSurface.ClosedDisplayMode.compact:
-                            case _CommandingSurface.ClosedDisplayMode.full:
-                                LiveUnit.Assert.isTrue(commandingSurface._canMeasure(),
-                                    "TEST ERROR: Closed CommandingSurface with closedDisplayMode:" + mode + " is unable to measure. Layout is blocked.");
-                                LiveUnit.Assert.areEqual(testCase.expectsOverflowCommands, hasOverflowAreaCommands,
-                                    "TEST ERROR: Configuration for test: " + testCase.name + " with closedDisplayMode: " + mode +
-                                    " has incorrect presence of commands in overflowarea");
-                                break;
-                            case _CommandingSurface.ClosedDisplayMode.minimal:
-                            case _CommandingSurface.ClosedDisplayMode.none:
-                                LiveUnit.Assert.isFalse(commandingSurface._canMeasure(),
-                                    "TEST ERROR: Test expects that a closed CommandingSurface with closedDisplayMode: " + mode +
-                                    " can't measure or peform layout. Update the test to include '" + mode + "' with the closedDisplayModes" +
-                                    " that can be measured while closed.");
-                                break;
-                            default:
-                                LiveUnit.Assert.fail("TEST ERROR: Unknown ClosedDisplayMode enum value: " + mode);
-                                break;
-                        }
+                        verifyPreCondition(commandingSurface, testCase);
 
-                        locals.verifyOverflowButton(commandingSurface);
+                        visibleOverflowButton_Helpers.verifyOverflowButton(commandingSurface);
                         completePromise();
 
                     })
