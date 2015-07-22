@@ -517,7 +517,7 @@ function _findNextFocusElementInternal(direction: string, options?: XYFocusOptio
             return false;
         }
 
-        var style = getComputedStyle(element);
+        var style = _ElementUtilities._getComputedStyle(element);
         if (element.getAttribute("tabIndex") === "-1" || style.display === "none" || style.visibility === "hidden" || element.disabled) {
             // Skip elements that are hidden
             // Note: We don't check for opacity === 0, because the browser cannot tell us this value accurately.
@@ -696,11 +696,14 @@ if (_Global.document) {
         var data: ICrossDomainMessage = e.data[CrossDomainMessageConstants.messageDataProperty];
         switch (data.type) {
             case CrossDomainMessageConstants.register:
-                _xyFocusEnabledIFrames.push(e.source);
-                e.source.addEventListener("unload", function XYFocus_handleIFrameUnload() {
-                    _unregisterIFrame(e.source);
-                    e.source.removeEventListener("unload", XYFocus_handleIFrameUnload);
-                });
+                // e.source may be undefined if the iframe is no longer in the DOM
+                if (e.source) {
+                    _xyFocusEnabledIFrames.push(e.source);
+                    e.source.addEventListener("unload", function XYFocus_handleIFrameUnload() {
+                        _unregisterIFrame(e.source);
+                        e.source.removeEventListener("unload", XYFocus_handleIFrameUnload);
+                    });
+                }
                 break;
 
             case CrossDomainMessageConstants.unregister:
