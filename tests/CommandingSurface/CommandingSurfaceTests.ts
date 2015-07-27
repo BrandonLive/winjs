@@ -405,7 +405,6 @@ module CorsicaTests {
                         // PRECONDITION: Sanity test that the testCase's expected configuration for overflow commands 
                         // has been met.
                         verifyPreCondition(commandingSurface, testCase);
-
                         visibleOverflowButton_Helpers.verifyOverflowButton(commandingSurface);
                         completePromise();
 
