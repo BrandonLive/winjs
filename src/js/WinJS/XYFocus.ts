@@ -609,7 +609,7 @@ function _handleKeyEvent(e: KeyboardEvent): void {
         return;
     }
 
-    var activeElement = <HTMLElement>_Global.document.activeElement;
+    var activeElement = <HTMLElement>_Global.document.activeElement || document.body;
     var shouldPreventDefault = false;
 
     var suspended = _ElementUtilities._matchesSelector(activeElement, "." + ClassNames.suspended + ", ." + ClassNames.suspended + " *");
