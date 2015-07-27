@@ -800,6 +800,12 @@ define([
                 _lastMaxHeight: null,
 
                 _baseFlyoutConstructor: function Flyout_baseFlyoutContstructor(element, options) {
+                    // TODO: We are having two issues when we set flyout.hidden = false at construction time.
+                    // First is showing the flyout requires an anchor. Even if an anchor is provided in the constructor, setOptions may try to set the hidden property first,
+                    // which results in an anchor not found excception.
+                    // Second is that showing the flyout requires the _dissmissable object which doesn't get created currently, until later on in the constructor after options 
+                    // have been set.
+
                     // Flyout constructor
 
                     // We have some options with defaults
