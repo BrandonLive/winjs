@@ -211,6 +211,7 @@ export class _CommandingSurface {
         var isChangingState = (value !== this._closedDisplayMode);
         if (ClosedDisplayMode[value] && isChangingState) {
             this._closedDisplayMode = value;
+            this._updateDomImpl.layoutDirty();
             this._machine.updateDom();
         }
     }
